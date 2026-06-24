@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRC Driver Buddy</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="sidebar collapsed">
+            <div class="sidebar-top">
+                <button id="toggleSidebar" class="icon-btn"><i class="fa-solid fa-bars"></i></button>
+            </div>
+            <div class="sidebar-menu">
+                <button class="nav-btn active" data-view="dashboard">
+                    <i class="fa-solid fa-house"></i>
+                    <span class="nav-text">Home</span>
+                </button>
+                <button class="nav-btn" data-view="strategyBoard">
+                    <i class="fa-solid fa-pen-ruler"></i>
+                    <span class="nav-text">Strategy Board</span>
+                </button>
+                <button id="sidebarSettingsBtn" class="nav-btn">
+                    <i class="fa-solid fa-gear"></i>
+                    <span class="nav-text">Settings</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content Wrapper -->
+        <div class="app-content">
+            <!-- Header -->
+            <header class="glass-header">
+                <div class="header-content">
+                    <h1><i class="fa-solid fa-robot"></i> Driver Buddy</h1>
+                </div>
+            </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Dashboard View -->
+            <section id="dashboard" class="view active">
+                <div class="team-overview glass-panel">
+                    <h2 id="myTeamTitle">Team ...</h2>
+                    <p id="eventTitle">Loading Event...</p>
+                </div>
+
+                <div class="matches-container">
+                    <h3>Upcoming Matches</h3>
+                    <div id="matchList" class="match-list">
+                        <!-- Matches will be injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Match Details View -->
+            <section id="matchDetails" class="view hidden">
+                <button id="backBtn" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Matches</button>
+                <h2 id="matchTitle" class="match-title">Quals 1</h2>
+                
+                <div class="alliances-container">
+                    <!-- Red Alliance -->
+                    <div class="alliance-col red-alliance">
+                        <div class="alliance-header">
+                            <h3>Red Alliance</h3>
+                        </div>
+                        <div id="redTeams" class="teams-grid">
+                            <!-- Red teams injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Blue Alliance -->
+                    <div class="alliance-col blue-alliance">
+                        <div class="alliance-header">
+                            <h3>Blue Alliance</h3>
+                        </div>
+                        <div id="blueTeams" class="teams-grid">
+                            <!-- Blue teams injected here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Strategy Board View -->
+            <section id="strategyBoard" class="view hidden">
+                <div class="strategy-header">
+                    <h2><i class="fa-solid fa-pen-ruler"></i> 2026 Strategy Board</h2>
+                    <select id="strategyMatchSelect" class="match-select">
+                        <option value="">Select Match...</option>
+                    </select>
+                    <div class="stage-selector hidden" id="stageSelector">
+                        <button class="stage-btn active" data-stage="start">Start</button>
+                        <button class="stage-btn" data-stage="auto">Auto</button>
+                        <button class="stage-btn" data-stage="teleop">Tele-op</button>
+                        <button class="stage-btn" data-stage="endgame">End Game</button>
+                    </div>
+                    <div class="drawing-tools">
+                        <input type="color" id="drawColor" value="#ff3366" title="Brush Color">
+                        <input type="range" id="drawSize" min="1" max="20" value="5" title="Brush Size">
+                        <button id="eraserBtn" class="tool-btn" title="Eraser (Also clears robot path when dragged)"><i class="fa-solid fa-eraser"></i></button>
+                        <button id="clearBoardBtn" class="tool-btn clear-btn" title="Clear Freehand Drawing"><i class="fa-solid fa-trash"></i></button>
+                        <div class="divider"></div>
+                        <button id="saveAutoBtn" class="tool-btn" title="Save Team Auto"><i class="fa-solid fa-floppy-disk"></i></button>
+                        <button id="loadAutoBtn" class="tool-btn" title="Load Team Auto"><i class="fa-solid fa-folder-open"></i></button>
+                    </div>
+                </div>
+                <div class="canvas-container">
+                    <div id="robotOverlays"></div>
+                    <canvas id="strategyCanvas" width="1080" height="540"></canvas>
+                </div>
+            </section>
+        </main>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settingsModal" class="modal-overlay hidden">
+            <div class="modal-content glass-panel">
+                <h2>Settings</h2>
+                <div class="input-group">
+                    <label for="teamNumber">Your Team Number</label>
+                    <input type="number" id="teamNumber" placeholder="e.g. 118">
+                </div>
+                <div class="input-group">
+                    <label for="eventKey">Event Key (e.g. 2024txhou)</label>
+                    <input type="text" id="eventKey" placeholder="e.g. 2024txhou">
+                </div>
+                <div class="input-group">
+                    <label for="tbaKey">The Blue Alliance API Key</label>
+                    <input type="password" id="tbaKey" placeholder="Enter TBA Read-Only Key">
+                    <small>Get this from your TBA account dashboard.</small>
+                </div>
+                <button id="saveSettingsBtn" class="primary-btn">Save & Reload</button>
+            </div>
+        </div>
+
+        <!-- Save Auto Modal -->
+        <div id="saveAutoModal" class="modal-overlay hidden">
+            <div class="modal-content glass-panel">
+                <h2>Save Auto Path</h2>
+                <div class="input-group">
+                    <label for="saveAutoTeam">Select Team</label>
+                    <select id="saveAutoTeam" class="match-select" style="width: 100%;"></select>
+                </div>
+                <div class="input-group">
+                    <label for="saveAutoName">Auto Name</label>
+                    <input type="text" id="saveAutoName" placeholder="e.g. 4 Note Center">
+                </div>
+                <button id="confirmSaveAutoBtn" class="primary-btn">Save Auto</button>
+                <button class="primary-btn close-modal-btn" style="margin-top: 10px; background: transparent; border: 1px solid var(--glass-border);">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Load Auto Modal -->
+        <div id="loadAutoModal" class="modal-overlay hidden">
+            <div class="modal-content glass-panel">
+                <h2>Load Auto Path</h2>
+                <div class="input-group">
+                    <label for="loadAutoTeam">Select Team</label>
+                    <select id="loadAutoTeam" class="match-select" style="width: 100%;"></select>
+                </div>
+                <div class="input-group">
+                    <label for="loadAutoSelect">Select Saved Auto</label>
+                    <select id="loadAutoSelect" class="match-select" style="width: 100%;">
+                        <option value="">No autos found</option>
+                    </select>
+                </div>
+                <button id="confirmLoadAutoBtn" class="primary-btn">Load Auto</button>
+                <button class="primary-btn close-modal-btn" style="margin-top: 10px; background: transparent; border: 1px solid var(--glass-border);">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Template for a Team Card -->
+        <template id="teamCardTemplate">
+            <div class="team-card">
+                <div class="team-photo-container">
+                    <img src="" alt="Robot Photo" class="team-photo">
+                    <div class="team-number-badge"></div>
+                </div>
+                <div class="team-info">
+                    <h4 class="team-name"></h4>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <span class="stat-label">Total EPA</span>
+                            <span class="stat-value epa-total"></span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">Auto EPA</span>
+                            <span class="stat-value epa-auto"></span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">Teleop EPA</span>
+                            <span class="stat-value epa-teleop"></span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">Endgame EPA</span>
+                            <span class="stat-value epa-endgame"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
