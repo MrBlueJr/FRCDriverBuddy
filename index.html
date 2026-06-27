@@ -55,7 +55,12 @@
                 <div class="matches-container">
                     <h3>Upcoming Matches</h3>
                     <div id="matchList" class="match-list">
-                        <!-- Matches will be injected here -->
+                        <!-- Upcoming Matches will be injected here -->
+                    </div>
+                    
+                    <h3 style="margin-top: 2rem;">Past Matches</h3>
+                    <div id="pastMatchList" class="match-list">
+                        <!-- Past Matches will be injected here -->
                     </div>
                 </div>
             </section>
@@ -64,6 +69,7 @@
             <section id="matchDetails" class="view hidden">
                 <button id="backBtn" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Matches</button>
                 <h2 id="matchTitle" class="match-title">Quals 1</h2>
+                <div id="matchPrediction" class="match-prediction" style="text-align: center; margin-bottom: 2rem; font-size: 1.2rem; font-weight: 600;"></div>
                 
                 <div class="alliances-container">
                     <!-- Red Alliance -->
@@ -107,6 +113,8 @@
                         <button id="eraserBtn" class="tool-btn" title="Eraser (Also clears robot path when dragged)"><i class="fa-solid fa-eraser"></i></button>
                         <button id="clearBoardBtn" class="tool-btn clear-btn" title="Clear Freehand Drawing"><i class="fa-solid fa-trash"></i></button>
                         <div class="divider"></div>
+                        <button id="strategyFullscreenBtn" class="tool-btn" title="Fullscreen Strategy Board"><i class="fa-solid fa-expand"></i></button>
+                        <button id="downloadStrategyBtn" class="tool-btn" title="Download Strategy Image"><i class="fa-solid fa-download"></i></button>
                         <button id="saveAutoBtn" class="tool-btn" title="Save Team Auto"><i class="fa-solid fa-floppy-disk"></i></button>
                         <button id="loadAutoBtn" class="tool-btn" title="Load Team Auto"><i class="fa-solid fa-folder-open"></i></button>
                     </div>
@@ -114,6 +122,7 @@
                 <div class="canvas-container">
                     <div id="robotOverlays"></div>
                     <canvas id="strategyCanvas" width="1080" height="540"></canvas>
+                    <div id="brushCursor" class="brush-cursor"></div>
                 </div>
             </section>
         </main>
